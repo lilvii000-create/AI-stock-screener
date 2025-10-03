@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 台股選股神器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background-color: #020617; /* Tailwind slate-950 */
+        color-scheme: dark;
+      }
+      /* UPDATED SPINNER ANIMATION */
+      .animate-spin {
+        animation: spinner-rotate 2s linear infinite;
+      }
+      .spinner-path {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+        animation: spinner-dash 1.5s ease-in-out infinite;
+        stroke-linecap: round;
+      }
+      @keyframes spinner-rotate {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinner-dash {
+        0% {
+          stroke-dasharray: 1, 200;
+          stroke-dashoffset: 0;
+        }
+        50% {
+          stroke-dasharray: 89, 200;
+          stroke-dashoffset: -35px;
+        }
+        100% {
+          stroke-dasharray: 89, 200;
+          stroke-dashoffset: -124px;
+        }
+      }
+      /* NEW BLINKING ELLIPSIS ANIMATION */
+      @keyframes blink {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 1; }
+      }
+      .animate-blink {
+        animation: blink 1.4s infinite ease-in-out both;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "vite": "https://aistudiocdn.com/vite@^7.1.5",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.19.0",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.2"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>

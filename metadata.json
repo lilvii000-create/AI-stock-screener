@@ -1,0 +1,5 @@
+{
+  "name": "AI 台股選股神器",
+  "description": "一個使用 AI 篩選台灣股市中「長抱型」與「波段型」個股的智慧選股工具，提供詳細的分析理由與建議。",
+  "requestFramePermissions": []
+}
