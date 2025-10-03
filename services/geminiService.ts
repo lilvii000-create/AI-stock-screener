@@ -2,13 +2,21 @@ import { GoogleGenAI } from "@google/genai";
 // FIX: Import MultiSelectCriterion and SelectableCriterion to correctly cast and type-guard criteria objects.
 import type { GeminiApiResponse, Source, StockInfo, AllocationPlan, StockScreenerCriteria, SingleStockAnalysisResult, StreamedData, MultiSelectCriterion, SelectableCriterion } from '../types';
 
-const API_KEY = process.env.API_KEY;
+let ai: GoogleGenAI | null = null;
+let initError: Error | null = null;
 
-if (!API_KEY) {
-  throw new Error("API_KEY environment variable not set.");
+try {
+  const API_KEY = process.env.API_KEY;
+  if (!API_KEY) {
+    // This error won't crash the app, but will be thrown when an API function is called.
+    throw new Error("AI服務未配置 API 金鑰。請確保環境變數已正確設定。");
+  }
+  ai = new GoogleGenAI({ apiKey: API_KEY });
+} catch (e) {
+  initError = e instanceof Error ? e : new Error('AI 服務初始化時發生未知錯誤。');
+  console.error("無法初始化 Gemini AI:", initError.message);
 }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 // --- NEW UTILITY FUNCTION for Source Prioritization ---
 const normalizeUrl = (uri: string): string => {
@@ -391,6 +399,9 @@ export const analyzeStocks = async (
     count: number,
     loosenCriteria: boolean = false
 ): Promise<void> => {
+  if (initError) throw initError;
+  if (!ai) throw new Error("Gemini AI client is not available.");
+
   try {
     const prompt = createAnalysisPrompt(category, criteria, excludeTickers, count, loosenCriteria);
     const responseStream = await ai.models.generateContentStream({
@@ -479,6 +490,9 @@ export const analyzeStocks = async (
 
 
 export const generateAllocationPlan = async (totalAmount: number, ratio: number, stocks: GeminiApiResponse): Promise<AllocationPlan> => {
+    if (initError) throw initError;
+    if (!ai) throw new Error("Gemini AI client is not available.");
+    
     try {
         const prompt = createAllocationPrompt(totalAmount, ratio, stocks);
         const response = await ai.models.generateContent({
@@ -530,6 +544,9 @@ export const generateAllocationPlan = async (totalAmount: number, ratio: number,
 };
 
 export const getSingleStockAnalysis = async (ticker: string): Promise<SingleStockAnalysisResult> => {
+  if (initError) throw initError;
+  if (!ai) throw new Error("Gemini AI client is not available.");
+
   try {
     const prompt = createSingleStockAnalysisPrompt(ticker);
     const response = await ai.models.generateContent({
