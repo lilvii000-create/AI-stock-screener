@@ -49,11 +49,7 @@
         animation: blink 1.4s infinite ease-in-out both;
       }
     </style>
-    <!-- 
-      這裡不再需要 importmap。
-      Vite 在 'npm run build' 期間會自動從 package.json 處理所有依賴。
-    -->
-<script type="importmap">
+  <script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
@@ -68,10 +64,12 @@
 </head>
   <body>
     <div id="root"></div>
-    <!-- 
-      這是 Vite 的標準應用程式入口。
-      在打包過程中，Vite 會自動將這個標籤替換為指向優化後 JavaScript 檔案的連結。
+    <!--
+      這是 Vite 的應用程式入口。
+      在 'npm run build' 過程中，Vite 會自動處理這個檔案和它的依賴，
+      並將此處的 script 標籤替換為指向最終打包好的 JavaScript 檔案的連結。
+      使用相對路徑 './src/index.tsx' 是為了確保在子目錄部署時的相容性。
     -->
-    <script type="module" src="/src/index.tsx"></script>
+    <script type="module" src="./src/index.tsx"></script>
   </body>
 </html>
